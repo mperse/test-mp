@@ -3,9 +3,59 @@
  */
 package databox.importer;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import databox.importer.constants.MainConstants;
+import databox.importer.services.core.AbstractServiceController;
+
 public class MainControlerTest {
 
-	/*
-	 * @Test public void testInitialization() { MainControllerHolder controler = new MainControllerHolder(); assertTrue("Controler initialization should return 'true'", controler.initialize()); }
-	 */
+	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
+	public MainControlerTest() {
+	}
+
+	class TestController extends AbstractServiceController {
+
+		public TestController(String id) {
+			super("Test", id);
+		}
+
+		@Override
+		public synchronized void run() {
+			logger.info("Strating update for " + getFullId());
+			try {
+				wait(MainConstants.DEFAULT_THREAD_DELAY);
+				run();
+			} catch (Exception e) {
+				logger.error("failed to delay thread: " + e.getLocalizedMessage(), e);
+			}
+		}
+
+	}
+
+	@Test
+	public void testInitialization() {
+		TestController controller1 = new TestController("1");
+		TestController controller2 = new TestController("2");
+
+		MainControllerHolder instance = MainControllerHolder.getInstance();
+		instance.addControler(controller1);
+		assertEquals(instance.getControlersSize(), 1);
+		instance.addControler(controller1);
+		assertEquals(instance.getControlersSize(), 1);
+		instance.addControler(controller2);
+		assertEquals(instance.getControlersSize(), 2);
+
+		controller1.disableAndRemove();
+		assertEquals(instance.getControlersSize(), 1);
+		controller2.disableAndRemove();
+		assertEquals(instance.getControlersSize(), 0);
+
+	}
+
 }

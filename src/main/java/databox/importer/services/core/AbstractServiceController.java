@@ -8,6 +8,8 @@ public class AbstractServiceController extends Thread {
 	private String id;
 
 	public AbstractServiceController(String type, String id) {
+		super();
+		this.id = id;
 		this.type = type;
 	}
 

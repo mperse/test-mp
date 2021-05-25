@@ -39,6 +39,7 @@ public class FbServiceController extends AbstractServiceController {
 		}
 		try {
 			wait(MainConstants.DEFAULT_THREAD_DELAY);
+			run();
 		} catch (Exception e) {
 			logger.error("failed to delay thread: " + e.getLocalizedMessage(), e);
 		}

@@ -2,22 +2,18 @@ package databox.importer.services.core.sdk;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.OutputStream;
+import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import databox.importer.utils.DateFormatUtil;
+
 public class DataboxWrapper {
-
-	public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-
 	private static final Logger logger = LoggerFactory.getLogger(DataboxWrapper.class);
 	Databox service = null;
 
@@ -28,15 +24,39 @@ public class DataboxWrapper {
 	}
 
 	public void pushDataAndLog(List<KPI> data) throws Exception {
-		try (OutputStream outputStream = new FileOutputStream(reportLocation)) {
+		try {
 			service.push(data);
-			String dtbRecordWithTime = SDF.format(new Date()) + " -> " + data + System.lineSeparator();
-			outputStream.write(dtbRecordWithTime.getBytes());
-			outputStream.flush();
+			printStatistics(data, null);
 		} catch (Exception e) {
 			logger.error("Error on data push: " + e.getLocalizedMessage(), e);
+			printStatistics(data, e);
 			throw e;
 		}
+	}
+
+	private void printStatistics(List<KPI> data, Exception e) {
+		try (FileWriter writter = new FileWriter(reportLocation, true)) {
+			String dtbRecordWithTime = prepareData(data, e);
+			writter.write(dtbRecordWithTime);
+			writter.flush();
+		} catch (Exception e1) {
+			logger.error("Error on data push: " + e1.getLocalizedMessage(), e1);
+		}
+	}
+
+	private String prepareData(List<KPI> data, Exception e) {
+		StringBuilder sb = new StringBuilder(DateFormatUtil.SDF.format(new Date()));
+		sb.append(";numKPI:");
+		sb.append(data.size());
+		sb.append(";data:");
+		sb.append(data);
+		sb.append(";status:");
+		sb.append(e == null ? "OK" : "ERROR");
+		if (e != null) {
+			sb.append(";error: ").append(e.getLocalizedMessage());
+		}
+		sb.append(System.lineSeparator());
+		return sb.toString();
 	}
 
 	public void clearReport() throws Exception {

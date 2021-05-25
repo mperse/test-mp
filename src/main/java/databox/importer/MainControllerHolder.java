@@ -27,8 +27,17 @@ public class MainControllerHolder {
 			logger.error("Controller is null.");
 			return;
 		}
+
+		if (controlersList.contains(controller)) {
+			logger.error("Controller already exists and will not be added.");
+			return;
+		}
+
 		logger.debug("Adding controller: " + controller.getFullId());
 		controlersList.add(controller);
+		if (!controller.isAlive()) {
+			controller.start();
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -43,12 +52,16 @@ public class MainControllerHolder {
 		controller.stop();
 	}
 
-	public boolean cantainsConroller(String type, String userId) {
+	public boolean cantainsController(String type, String userId) {
 		return controlersList.stream().anyMatch(c -> c.idMatheches(AbstractServiceController.createId(type, userId)));
 	}
 
-	public AbstractServiceController getConroller(String type, String userId) {
+	public AbstractServiceController getController(String type, String userId) {
 		Optional<AbstractServiceController> controllerEntity = controlersList.stream().filter(c -> c.idMatheches(AbstractServiceController.createId(type, userId))).findFirst();
 		return controllerEntity.isPresent() ? controllerEntity.get() : null;
+	}
+
+	public int getControlersSize() {
+		return controlersList.size();
 	}
 }

@@ -1,42 +1,40 @@
-apply plugin: 'java-library'
-apply plugin: 'war'
-apply from: 'https://raw.github.com/gretty-gradle-plugin/gretty/master/pluginScripts/gretty.plugin'
-
-
-buildscript {
-       repositories {
-             jcenter()
-             
-             flatDir {
-		       dirs 'libs'
-		    }
-       }
-       dependencies {
-             classpath 'org.gretty:gretty:+'
-       }
+plugins {
+  id "java-library"
+  id "war"
+  id "org.gretty" version "3.0.3"
 }
+
+repositories {
+	jcenter()
+}
+
+/*
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath 'org.gretty:gretty:3.0.3'
+  }
+}*/
 
 dependencies {
     implementation group: 'com.sun.jersey', name: 'jersey-client', version: '1.19.4'
     implementation group: 'com.restfb', name: 'restfb', version: '3.18.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
-
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.1'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
-    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
     
-   // compile group: 'org.apache.logging.log4j', name: 'log4j-web', version: '2.14.1'
-	compile fileTree(include: ['*.jar'], dir: 'libs')
-	
+   // implementation group: 'org.zalando.stups', name: 'tokens', version: '0.13.0'
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.1'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
+	implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
+    
 	compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.14'
 	
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:28.2-jre'
-
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
-
 
 version = '1.0.0'
 
@@ -44,3 +42,11 @@ task copyToLib(type: Copy) {
     from configurations.runtimeClasspath
     into "$buildDir/libs/libs"
 }
+
+
+tasks.withType(Test) {
+    systemProperties['fb_auth_token'] = project.getProperty("fb_auth_token") 
+    systemProperties['fb_app_id'] = project.getProperty("fb_app_id")
+    systemProperties['fb_app_secret'] = project.getProperty("fb_app_secret")
+}
+

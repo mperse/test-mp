@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import databox.importer.services.core.impl.FacebookServiceImpl;
+import databox.importer.services.core.impl.ParcelDataServiceImpl;
 import databox.importer.services.core.impl.SystemStatusImpl;
 import databox.importer.utils.JsonObjectMapperProvider;
 
@@ -24,8 +25,7 @@ public class DemoApplication extends Application {
 		super();
 
 		classes.add(JsonObjectMapperProvider.class);
-		classes.add(FacebookServiceImpl.class);
-
+		classes.add(ParcelDataServiceImpl.class);
 		logger.info("Server Application started.");
 	}
 

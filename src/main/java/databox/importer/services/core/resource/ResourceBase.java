@@ -10,5 +10,6 @@ public interface ResourceBase {
 
 	public static final String SYSTEM_PATH = "system/";
 	public static final String FB_PATH = "fb/";
+	public static final String PARCEL_PATH = "parcel/";
 
 }
