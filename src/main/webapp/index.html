@@ -106,7 +106,7 @@ function stopUserDataUpdate() {
 function calculateValue() { 
     const kosifko = document.getElementById("kosifko").value;
     const parcel = document.getElementById("parcel").value;
-    const url =  'data/parcel/value/' +  kosifko + '/' + parcel;
+    const url =  'data/parcel/value/' +  encodeURIComponent(kosifko) + '/' + encodeURIComponent(parcel);
     
     const xhttp = new XMLHttpRequest();
   	xhttp.onload = function () {

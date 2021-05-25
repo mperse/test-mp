@@ -112,7 +112,7 @@ public class FacebookDataUpdater {
 			addKPI(userInformation, DataboxKeys.FACEBOOK.DAYS_LAST_POST, duration);
 			addKPI(userInformation, DataboxKeys.FACEBOOK.POSTS_LAST_30_DAYS, posts.size());
 		} else {
-			addKPI(userInformation, DataboxKeys.FACEBOOK.DAYS_LAST_POST, null);
+			addKPI(userInformation, DataboxKeys.FACEBOOK.DAYS_LAST_POST, 365);
 			addKPI(userInformation, DataboxKeys.FACEBOOK.POSTS_LAST_30_DAYS, 0);
 		}
 	}

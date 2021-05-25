@@ -39,11 +39,14 @@ public class ParcelDataServiceImpl implements ParcelDataService {
 
 	@Override
 	public String getParcelValue(String kosifko, String parcel) {
-		/*
-		 * if (isNullOrEmpty(kosifko)) { throw new BadRequestException("Please enter valid cadastral number."); }
-		 * 
-		 * if (isNullOrEmpty(parcel)) { throw new BadRequestException("Please enter valid parcel number."); }
-		 */
+
+		if (isNullOrEmpty(kosifko)) {
+			throw new BadRequestException("Please enter valid cadastral number.");
+		}
+
+		if (isNullOrEmpty(parcel)) {
+			throw new BadRequestException("Please enter valid parcel number.");
+		}
 
 		logger.debug("kosifko: " + kosifko + ", parcel" + parcel);
 		Parcela parcela = util.getParcel(kosifko.trim(), parcel.trim());
@@ -59,12 +62,11 @@ public class ParcelDataServiceImpl implements ParcelDataService {
 		} catch (Exception e) {
 			logger.error("Failed to log data do databox: " + e.getLocalizedMessage(), e);
 		}
-		System.out.println(totalVal);
 		return totalVal != null ? formatter.format(totalVal) + " €" : "/";
 	}
 
 	private boolean isNullOrEmpty(String kosifko) {
-		return kosifko != null && !kosifko.isEmpty();
+		return kosifko == null && kosifko.isEmpty();
 	}
 
 	private void generateFakeDataboxReport(Parcela parc, BigDecimal totalVal) throws ParseException, Exception {
@@ -78,7 +80,7 @@ public class ParcelDataServiceImpl implements ParcelDataService {
 	public List<KPI> getValues(BigDecimal totalVal, BigDecimal area) throws ParseException {
 		List<KPI> data = new ArrayList<>();
 		Date dateFrom = DateFormatUtil.SDF.parse("2021-05-1 00:00:00");
-		Date dateTo = DateFormatUtil.SDF.parse("2021-05-20 00:00:00");
+		Date dateTo = new Date();
 
 		Calendar c = Calendar.getInstance();
 		c.setTime(dateFrom);
@@ -92,12 +94,6 @@ public class ParcelDataServiceImpl implements ParcelDataService {
 
 	private static double getFactor(Double varialePart) {
 		return (ThreadLocalRandom.current().nextDouble() * varialePart) + (1 - varialePart);
-	}
-
-	public static void main(String[] args) {
-		for (int i = 0; i < 20; i++) {
-			System.out.println(getFactor(0.2));
-		}
 	}
 
 }

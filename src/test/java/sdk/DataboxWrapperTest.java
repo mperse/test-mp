@@ -30,7 +30,7 @@ public class DataboxWrapperTest {
 	public List<KPI> getValues(BigDecimal totalVal, BigDecimal area) throws ParseException {
 		List<KPI> data = new ArrayList<>();
 		Date dateFrom = DateFormatUtil.SDF.parse("2021-05-1 00:00:00");
-		Date dateTo = DateFormatUtil.SDF.parse("2021-05-20 00:00:00");
+		Date dateTo = new Date();
 
 		Calendar c = Calendar.getInstance();
 		c.setTime(dateFrom);

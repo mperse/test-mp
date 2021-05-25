@@ -21,7 +21,6 @@ public class DateFormatUtil {
 		try {
 			return SDF_DAY_ONLY.parse(SDF_DAY_ONLY.format(new Date()));
 		} catch (ParseException e) {
-			// should not happen
 			logger.error(e.getLocalizedMessage(), e);
 			throw new RuntimeException(e);
 		}
