@@ -7,9 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import databox.importer.services.core.resource.SystemStatusService;
@@ -24,8 +21,6 @@ public class SystemStatusImpl implements SystemStatusService {
 
 	ObjectMapper mapper = new ObjectMapper();
 	Proxy proxy = null;
-
-	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	public SystemStatusImpl() {
 	}

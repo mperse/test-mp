@@ -10,11 +10,8 @@ import com.restfb.types.Post;
 import com.restfb.types.User;
 
 import databox.importer.utils.ConnectionUtil;
-import databox.importer.utils.JsonObjectMapper;
 
 public class FbConnectionTest {
-
-	private JsonObjectMapper mapper = new JsonObjectMapper();
 
 	ConnectionUtil util = new ConnectionUtil();
 
