@@ -108,6 +108,8 @@ function calculateValue() {
     const parcel = document.getElementById("parcel").value;
     const url =  'data/parcel/value/' +  encodeURIComponent(kosifko) + '/' + encodeURIComponent(parcel);
     
+    document.getElementById('btn-search').disabled = true;
+
     const xhttp = new XMLHttpRequest();
   	xhttp.onload = function () {
 		  if (xhttp.status >= 200 && xhttp.status < 400) {  				
@@ -116,11 +118,15 @@ function calculateValue() {
           displayValue('Failed to obtain parcel data!');
   				console.log(xhttp.statusText);
         }
+        document.getElementById('btn-search').disabled = false;
 		}
 
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState === 4 && xhttp.status === 0) {
         displayValue('Failed to connect ot server.');
+      }
+      if(xhttp.readyState === 4){
+        document.getElementById('btn-search').disabled = false;
       }
     };
 
@@ -161,7 +167,7 @@ function displayValue(value) {
         <input id='kosifko' type="text" value="166"> <br/><br/>
         Parcel number<br/>
         <input id='parcel' type="text" value="2196"> <br/><br/>
-        <button onclick="calculateValue();">Search</button> <br/><br/>
+        <button id='btn-search' onclick="calculateValue();">Search</button> <br/><br/>
         <div id="parc-value" class="parc-value"></div>
       </div>
     </div>
